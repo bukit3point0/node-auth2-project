@@ -26,7 +26,6 @@ const restricted = (req, res, next) => {
 
 const only = role_name => (req, res, next) => {
   const decodedToken = req.decodedJwt
-  console.log(`decodedToken ${decodedToken.role_name}`)
   if (decodedToken.role_name === role_name) {
     next()
   } else {
@@ -42,7 +41,6 @@ const checkUsernameExists = (req, res, next) => {
   const {username} = req.body
   User.findBy({username})
   .then(([user]) => {
-    console.log(user)
     if (user) {
       next()
     } else {
@@ -56,19 +54,21 @@ const checkUsernameExists = (req, res, next) => {
 
 const validateRoleName = (req, res, next) => {
   const {role_name} = req.body
+  console.log(`role_name 57`, role_name)
+  
   if(!role_name || role_name.trim() === "") {
     req.body.role_name = 'student'
     next()
   } else {
     User.findBy({role_name})
-    .then(role_name => {
-      // console.log(role_name)
-      if (role_name === "admin") {
+    .then(role => {
+      const trimmedRole = role_name.trim()
+      if (trimmedRole === "admin") {
         next({
           status: 422,
-          message: `Role name can not be admin`
+          message: `Role name can not be admin`,
         })
-      } else if (role_name.length > 32) {
+      } else if (trimmedRole.length > 32) {
         next({
           status: 422,
           message: `Role name can not be longer than 32 chars`
