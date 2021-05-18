@@ -54,7 +54,6 @@ const checkUsernameExists = (req, res, next) => {
 
 const validateRoleName = (req, res, next) => {
   const {role_name} = req.body
-  console.log(`role_name 57`, role_name)
   
   if(!role_name || role_name.trim() === "") {
     req.body.role_name = 'student'

@@ -32,7 +32,7 @@ function findById(user_id) {
     'r.role_name'
   )
   .where({user_id})
-  
+  .first()
 }
 
 async function add({ username, password, role_name }) { // done for you
